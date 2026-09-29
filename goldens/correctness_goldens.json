@@ -1,0 +1,12 @@
+[
+  {
+    "id": "corr_01",
+    "question": "What is the difference between Freemium and Free Trial?",
+    "ideal_answer": "Freemium offers a robust free tier indefinitely while locking advanced features, which acts as a marketing channel but requires supporting free users. Free Trial gives access to the entire premium product for a limited time (like 14 days), creating urgency and higher conversion but yielding lower top-of-funnel signups."
+  },
+  {
+    "id": "corr_02",
+    "question": "How do you calculate a RICE score?",
+    "ideal_answer": "RICE score is calculated using the formula: (Reach * Impact * Confidence) / Effort."
+  }
+]

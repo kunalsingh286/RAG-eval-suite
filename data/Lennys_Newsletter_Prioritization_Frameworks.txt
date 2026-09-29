@@ -1,0 +1,25 @@
+# The Ultimate Guide to Product Prioritization Frameworks
+
+As a PM, you will always have more ideas than engineering capacity. Prioritization is your primary job. Here are the three most effective frameworks:
+
+## 1. RICE Scoring
+Developed by Intercom, RICE stands for:
+- **Reach:** How many users will this impact in a given quarter?
+- **Impact:** How much will this increase the primary metric? (3 = massive, 2 = high, 1 = medium, 0.5 = low, 0.25 = minimal).
+- **Confidence:** How confident are you in these estimates? (100% = high, 80% = medium, 50% = low).
+- **Effort:** How many "person-months" will this take?
+
+*Formula: (Reach * Impact * Confidence) / Effort*
+
+## 2. The Kano Model
+This maps features on two axes: Customer Satisfaction vs. Feature Implementation. It categorizes features into:
+- **Basic Needs:** Things users expect (e.g., password reset). If missing, they are furious. If present, they are neutral.
+- **Performance:** The more you have, the better (e.g., faster load times).
+- **Delighters:** Unexpected features that create a "wow" moment.
+
+## 3. Value vs. Complexity Matrix
+A simple 2x2 grid. You map features based on Business Value (High/Low) and Implementation Complexity (High/Low).
+- High Value / Low Complexity = Quick Wins (Do these first).
+- High Value / High Complexity = Major Projects (Plan carefully).
+- Low Value / Low Complexity = Fill-ins (Do when bored).
+- Low Value / High Complexity = Time Sinks (Avoid).

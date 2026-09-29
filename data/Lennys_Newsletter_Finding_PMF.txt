@@ -1,0 +1,17 @@
+# The Framework for Finding Product-Market Fit (PMF)
+
+Product-Market Fit is the only thing that matters for an early-stage startup. But how do you know when you have it?
+
+## The Superhuman Metric
+Rahul Vohra popularized the "Sean Ellis test". Ask your users: "How would you feel if you could no longer use this product?"
+If over 40% answer "Very Disappointed", you likely have PMF. 
+
+## The Retention Plateau
+The most objective measure of PMF is your retention curve. If you plot the percentage of users still active over time, it should eventually flatten out (a plateau) rather than dropping to zero. If it flattens above 20%, you have a solid business. 
+
+## Signs you don't have PMF
+1. Usage is growing, but only because you are spending massively on marketing.
+2. Sales cycles are incredibly long, and customers don't renew.
+3. Word of mouth is non-existent.
+
+If you don't have PMF, do not scale your marketing. Focus entirely on talking to users, iterating the product, and narrowing your target audience until that retention curve flattens.

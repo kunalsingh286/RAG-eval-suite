@@ -1,0 +1,15 @@
+# How the biggest consumer apps got their first 1,000 users
+
+I spent the last month researching how companies like Airbnb, Uber, Tinder, and DoorDash acquired their initial user base. It turns out, almost none of them used paid ads. They did things that don't scale.
+
+## 1. Go where your users are offline
+- **Tinder:** Whitney Wolfe Herd visited college sororities, pitched the app, had everyone sign up on the spot, and then went to the fraternities to show them the app full of sorority girls. 
+- **Uber:** Travis Kalanick went to the Caltrain station in San Francisco and handed out referral codes to tech workers arriving from the peninsula.
+
+## 2. Piggyback off existing networks
+- **Airbnb:** They built a bot to cross-post their listings to Craigslist. This gave them access to Craigslist's massive audience for free.
+
+## 3. Create a viral waitlist
+- **Robinhood:** Created a landing page promising zero-fee stock trading. When you signed up, you saw your place in line. You could jump ahead in line by referring friends. They got 1 million users before writing a line of code.
+
+Focus on the micro. Do whatever it takes to get the first 10, 100, and 1,000 users manually.

@@ -1,0 +1,18 @@
+# SaaS Pricing Strategies: Freemium vs. Free Trial
+
+Pricing is the most under-optimized lever in SaaS. Most founders guess their pricing instead of testing it. Let's break down the two dominant Go-To-Market motions.
+
+## Freemium
+You offer a robust free tier indefinitely, but lock advanced features or usage limits behind a paywall.
+- **Pros:** Massive top-of-funnel growth. It acts as a marketing channel.
+- **Cons:** You have to support a massive base of free users who cost you server money and support time but yield zero revenue.
+- **When to use:** When your product has network effects (e.g., Slack, Zoom) or a massive total addressable market (e.g., Spotify).
+
+## Free Trial
+Users get access to the entire premium product for a limited time (usually 14 or 30 days), then must pay to continue.
+- **Pros:** Urgency. Users know they have to evaluate it quickly. Higher conversion rates from those who actually try it.
+- **Cons:** Lower top-of-funnel signups. 
+- **When to use:** When your product solves a highly specific, acute B2B pain point (e.g., an enterprise CRM or a complex developer tool).
+
+## Reverse Trial
+A hybrid approach popularized by companies like Airtable. New users get a 14-day free trial of the *highest* premium tier. When the trial ends, they aren't kicked out; instead, they are downgraded to a basic Freemium tier. This gives them a taste of the best features, creating a strong desire to upgrade later.

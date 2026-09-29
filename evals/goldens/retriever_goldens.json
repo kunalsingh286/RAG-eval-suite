@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ret_01",
+    "query": "What are the three elements of a growth loop?",
+    "ideal_answer": "The three elements of a growth loop are Input, Action, and Output."
+  },
+  {
+    "id": "ret_02",
+    "query": "How do you know when you have Product-Market Fit according to the Superhuman metric?",
+    "ideal_answer": "According to the Superhuman metric, you have PMF if over 40% of users say they would be 'Very Disappointed' if they could no longer use the product."
+  },
+  {
+    "id": "ret_03",
+    "query": "What is CAC?",
+    "ideal_answer": "CAC stands for Customer Acquisition Cost. It is how much you spend on sales and marketing to acquire one paying customer."
+  },
+  {
+    "id": "ret_04",
+    "query": "How did Tinder acquire its first 1,000 users?",
+    "ideal_answer": "Whitney Wolfe Herd visited college sororities to pitch the app and get signups, and then showed the app to fraternities."
+  }
+]

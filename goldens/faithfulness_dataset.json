@@ -1,0 +1,23 @@
+[
+  {
+    "id": "gen_lenny_01",
+    "query": "What is the Sean Ellis test for PMF?",
+    "ideal_context": [
+      "The Superhuman Metric\nRahul Vohra popularized the 'Sean Ellis test'. Ask your users: 'How would you feel if you could no longer use this product?' If over 40% answer 'Very Disappointed', you likely have PMF."
+    ]
+  },
+  {
+    "id": "gen_lenny_02",
+    "query": "What are the three elements of a growth loop?",
+    "ideal_context": [
+      "The Three Elements of a Loop\n1. Input: A new user, or a specific action taken by an existing user.\n2. Action: The step the user takes that creates value. (e.g., inviting a friend, creating public content).\n3. Output: The result of the action, which brings in the next set of new users."
+    ]
+  },
+  {
+    "id": "gen_lenny_03",
+    "query": "How is the RICE score calculated?",
+    "ideal_context": [
+      "RICE Scoring\nDeveloped by Intercom, RICE stands for Reach, Impact, Confidence, and Effort. Formula: (Reach * Impact * Confidence) / Effort"
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "lenny_r01",
+    "query": "What is the difference between Freemium and Free Trial?",
+    "ideal_answer": "Freemium offers a robust free tier indefinitely while locking advanced features, which acts as a marketing channel but requires supporting free users. Free Trial gives access to the entire premium product for a limited time (like 14 days), creating urgency and higher conversion but yielding lower top-of-funnel signups.",
+    "source": "Lennys_Newsletter_Pricing_Strategies"
+  },
+  {
+    "id": "lenny_r02",
+    "query": "What is the Sean Ellis test for Product-Market Fit?",
+    "ideal_answer": "The Sean Ellis test involves asking your users: 'How would you feel if you could no longer use this product?'. If over 40% answer 'Very Disappointed', you likely have Product-Market Fit.",
+    "source": "Lennys_Newsletter_Finding_PMF"
+  },
+  {
+    "id": "lenny_r03",
+    "query": "How do you calculate a RICE score for prioritization?",
+    "ideal_answer": "RICE score is calculated using the formula: (Reach * Impact * Confidence) / Effort.",
+    "source": "Lennys_Newsletter_Prioritization_Frameworks"
+  },
+  {
+    "id": "lenny_r04",
+    "query": "What are the three elements of a growth loop?",
+    "ideal_answer": "The three elements of a growth loop are: 1) Input (a new user or specific action), 2) Action (the step the user takes that creates value), and 3) Output (the result of the action that brings in the next set of users).",
+    "source": "Lennys_Newsletter_Growth_Loops"
+  }
+]

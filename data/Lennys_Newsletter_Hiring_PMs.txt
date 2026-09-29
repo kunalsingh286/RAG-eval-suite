@@ -1,0 +1,15 @@
+# How to Hire a Great Product Manager
+
+Hiring a PM is arguably harder than hiring an engineer because the skills are highly subjective. Here is exactly what to look for:
+
+## 1. High Agency
+When things go wrong, do they blame the engineering team, the sales team, or the market? A high-agency PM says, "The timeline slipped, but here is what I am doing right now to unblock the team." They force outcomes into existence.
+
+## 2. Extreme Clarity of Thought
+PMs write specs, lead meetings, and align stakeholders. If their communication is messy, the product will be messy. In an interview, ask them to explain a complex hobby they have to a 5-year-old. If they can't simplify it, do not hire them.
+
+## 3. Customer Obsession
+A mediocre PM relies on market research reports. A great PM spends 30% of their week on Zoom calls with actual users. Ask them: "Tell me about the last time a user totally surprised you, and how it changed your roadmap."
+
+## 4. The Take-Home Assignment
+Do not ask them to "design an elevator for a 1,000-story building." That's useless. Give them a real, sanitized problem your company faced 6 months ago. Ask them to write a 1-page PRD (Product Requirements Document) outlining how they would solve it. Look for how they define success metrics.

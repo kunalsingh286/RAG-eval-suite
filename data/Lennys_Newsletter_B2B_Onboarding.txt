@@ -1,0 +1,13 @@
+# Best practices for B2B SaaS Onboarding
+
+Onboarding is the most critical phase of the customer journey. If a team doesn't reach the "Aha!" moment within their first week, they will likely churn within 90 days.
+
+## 1. Time-to-Value (TTV)
+Your primary goal is to minimize TTV. Map out every step a user must take to get value out of your product. Can you remove 30% of those steps? 
+
+## 2. The Blank Slate Problem
+Never drop a new user into an empty dashboard. Always provide templates, pre-filled dummy data, or an interactive tutorial. 
+For example, when you join Notion, your workspace isn't empty—it's filled with "Getting Started" templates that teach you how the product works by using it.
+
+## 3. Empty States as Call to Actions
+If a user hasn't created a project yet, the "Projects" tab shouldn't just say "No projects". It should explain what a project is, why it's useful, and have a giant button saying "Create your first project".

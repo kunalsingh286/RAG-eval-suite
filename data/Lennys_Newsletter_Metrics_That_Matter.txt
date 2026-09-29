@@ -1,0 +1,20 @@
+# The 5 Growth Metrics That Actually Matter
+
+Vanity metrics (like total registered users) will kill your company. You need to focus on actionable metrics.
+
+## 1. Customer Acquisition Cost (CAC)
+How much you spend on sales and marketing to acquire one paying customer. If you spend $10,000 on Google Ads and get 100 customers, your CAC is $100.
+
+## 2. Lifetime Value (LTV)
+The total gross margin you expect to make from a customer over their entire relationship with your company. 
+Rule of thumb: Your LTV should be at least 3x your CAC.
+
+## 3. CAC Payback Period
+The time it takes for a customer to pay back the cost of acquiring them. For early-stage startups, this should be under 12 months. If it's longer, you will run out of cash trying to grow.
+
+## 4. Net Revenue Retention (NRR)
+This measures what happens to your revenue from a specific cohort of customers over time, including churn, downgrades, and upgrades (expansion revenue). 
+An NRR over 100% means your company would still grow even if you never signed another new customer. Elite SaaS companies have NRR > 120%.
+
+## 5. Daily Active Users / Monthly Active Users (DAU/MAU)
+A measure of stickiness. If your DAU/MAU is 50%, it means the average user opens your app 15 days out of the month. WhatsApp has a DAU/MAU of over 85%. Most standard apps hover around 20%.

@@ -1,0 +1,10 @@
+streamlit
+langchain-openai
+langchain-chroma
+langchain-core
+langchain-text-splitters
+openai
+chromadb
+python-dotenv
+sentence-transformers
+deepeval

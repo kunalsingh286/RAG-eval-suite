@@ -1,0 +1,15 @@
+# How to build a Growth Loop
+
+A growth loop is a closed system where the inputs through some process generates more of an output that can be reinvested in the input. Traditional funnels operate in one direction: you put money in at the top (ads), and get users at the bottom. But loops are different.
+
+## The Three Elements of a Loop
+1. **Input:** A new user, or a specific action taken by an existing user.
+2. **Action:** The step the user takes that creates value. (e.g., inviting a friend, creating public content).
+3. **Output:** The result of the action, which brings in the next set of new users.
+
+### Example: Pinterest's Content Loop
+- **Input:** A user signs up.
+- **Action:** They create a board and pin images. Pinterest's SEO automatically indexes this board.
+- **Output:** A non-user searches Google for "wedding ideas", finds the Pinterest board, and signs up to view it. This new user becomes the input for the next loop.
+
+To build a great product, you must transition from funnel-thinking to loop-thinking. Ask yourself: "How does one cohort of users directly lead to the next cohort of users?"
