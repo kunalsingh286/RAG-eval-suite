@@ -1,4 +1,4 @@
-# 🚀 Lenny's Product Assistant (Enterprise RAG + Offline Eval Suite)
+# 🚀 Lenny's Product Assistant (Enterprise RAG + Eval Suite)
 
 **🔴 Live Demo:** [https://rag-eval-suite.streamlit.app/](https://rag-eval-suite.streamlit.app/)
 
