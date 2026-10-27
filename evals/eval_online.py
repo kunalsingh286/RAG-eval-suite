@@ -12,7 +12,7 @@ from deepeval.metrics import (
 
 load_dotenv()
 
-PROJECT = "cx doubt solver"
+PROJECT = "lenny-product-assistant"
 JUDGE_MODEL = "gpt-4o-mini"
 THRESHOLD = 0.7
 SAMPLE_RATE = 1          # ~30% of traffic — 3 metrics × several calls each = expensive

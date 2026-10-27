@@ -94,7 +94,88 @@ def get_pipeline(fetch_k: int, top_k: int) -> RagPipeline:
     return RagPipeline(fetch_k=fetch_k, top_k=top_k)
 
 
+# --- ALPHA ACCESS CONTROL & COST PROTECTION GUARDRAILS ---
+MAX_QUERIES_PER_USER = 15
+MAX_QUERY_CHARS = 300
+
+# 15 Alpha testing slots + any custom names from env var ALPHA_USERS
+DEFAULT_ALPHA_USERS = {
+    "kunal",
+    "alpha1", "alpha2", "alpha3", "alpha4", "alpha5",
+    "tester1", "tester2", "tester3", "tester4", "tester5",
+    "friend1", "friend2", "friend3", "friend4", "friend5",
+    "rahul", "sneha", "amit", "priya", "rohit", "ananya", "vikram", "neha", "arjun", "pooja"
+}
+
+env_users = Path(".env").exists()
+import os
+raw_env_users = os.getenv("ALPHA_USERS", "")
+if raw_env_users:
+    ALLOWED_USERS = {u.strip().lower() for u in raw_env_users.split(",") if u.strip()}
+else:
+    ALLOWED_USERS = DEFAULT_ALPHA_USERS
+
+# Resolve user from URL query param (?user=name) or session state
+url_user = st.query_params.get("user", "")
+if isinstance(url_user, list):
+    url_user = url_user[0] if url_user else ""
+url_user = str(url_user).strip().lower()
+
+if "current_user" not in st.session_state:
+    st.session_state.current_user = url_user if url_user in ALLOWED_USERS else ""
+
+if url_user and url_user in ALLOWED_USERS:
+    st.session_state.current_user = url_user
+
+current_user = st.session_state.current_user
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# --- GATEKEEPER: BLOCK UNAUTHORIZED USERS (PREVENTS API DRAIN) ---
+if not current_user:
+    st.title("🔒 Lenny's Product Assistant — Private Alpha")
+    st.markdown("""
+    Welcome! This product prototype is currently undergoing a **closed Alpha evaluation** with a cohort of 10–15 testers.
+    
+    To protect OpenAI API quotas, public unauthenticated queries are disabled.
+    """)
+
+    st.info("💡 **If you received an invite link**, make sure you opened it with your custom link (e.g. `?user=yourname`).")
+
+    with st.expander("🔑 Have an invite username? Enter it to unlock access", expanded=True):
+        input_user = st.text_input("Invite Username / Name", placeholder="e.g. rahul, sneha, tester1").strip().lower()
+        if st.button("Unlock Prototype", type="primary"):
+            if input_user in ALLOWED_USERS:
+                st.session_state.current_user = input_user
+                st.query_params["user"] = input_user
+                st.rerun()
+            else:
+                st.error("Invalid invite username. Please check with the project owner.")
+
+    st.caption("Contact the project administrator for an invite token or access link.")
+    st.stop()
+
+
+# --- AUTHORIZED USER SESSION ---
+# Count queries made in this session
+user_queries_count = len([m for m in st.session_state.messages if m["role"] == "user"])
+queries_remaining = max(0, MAX_QUERIES_PER_USER - user_queries_count)
+
+
 with st.sidebar:
+    st.subheader(f"👋 Welcome, {current_user.capitalize()}!")
+    st.caption("Alpha Testing Cohort")
+    
+    # Quota Card
+    st.markdown(f"**Question Quota:** `{user_queries_count} / {MAX_QUERIES_PER_USER}` used")
+    st.progress(user_queries_count / MAX_QUERIES_PER_USER)
+    if queries_remaining > 0:
+        st.caption(f"⚡ {queries_remaining} question{'s' if queries_remaining != 1 else ''} remaining")
+    else:
+        st.warning("Quota reached for this session.")
+
+    st.divider()
     st.header("Retrieval settings")
     fetch_k = st.slider(
         "fetch_k — candidates from the vector store",
@@ -121,16 +202,13 @@ with st.sidebar:
 
     st.divider()
     st.caption(
-        "Answers are grounded only in the provided Lenny's Newsletter archives. If the material "
-        "doesn't cover it, the assistant abstains."
+        "Answers are grounded strictly in Lenny's Newsletter archives. If the material "
+        "doesn't cover it, the assistant will abstain."
     )
 
 
 st.title("🚀 Lenny's Product Assistant RAG")
-st.caption("Ask anything about product management, growth loops, and finding PMF based on Lenny's Newsletter.")
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+st.caption(f"Alpha Prototype · Session Active for **{current_user.capitalize()}**")
 
 
 def render_context(context: list[str], latency: float | None = None) -> None:
@@ -146,44 +224,64 @@ def render_context(context: list[str], latency: float | None = None) -> None:
                 st.divider()
 
 
-# replay the conversation so far
-for message in st.session_state.messages:
+# Replay conversation history
+for idx, message in enumerate(st.session_state.messages):
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-        if message["role"] == "assistant" and show_context and message.get("context"):
-            render_context(message["context"], message.get("latency"))
+        if message["role"] == "assistant":
+            if show_context and message.get("context"):
+                render_context(message["context"], message.get("latency"))
+            # In-app thumbs feedback
+            fb_key = f"fb_{idx}"
+            if fb_key not in st.session_state:
+                st.session_state[fb_key] = None
+            rating = st.feedback("thumbs", key=fb_key)
 
 
-query = st.chat_input("e.g. What is the difference between online and offline eval?")
+# Chat Input with budget check and length guardrail
+if queries_remaining <= 0:
+    st.info("🎉 **You have reached your 15-question alpha quota!** Thank you so much for testing Lenny's Assistant.")
+else:
+    placeholder = f"Ask anything about product management ({queries_remaining} questions left, max {MAX_QUERY_CHARS} chars)..."
+    query = st.chat_input(placeholder, max_chars=MAX_QUERY_CHARS)
 
-if query:
-    st.session_state.messages.append({"role": "user", "content": query})
-    with st.chat_message("user"):
-        st.markdown(query)
+    if query:
+        st.session_state.messages.append({"role": "user", "content": query})
+        with st.chat_message("user"):
+            st.markdown(query)
 
-    with st.chat_message("assistant"):
-        try:
-            rag = get_pipeline(fetch_k, top_k)
-            with st.spinner("Retrieving and generating…"):
-                started = time.perf_counter()
-                result = rag.invoke(query)
-                latency = time.perf_counter() - started
-        except Exception as exc:  # bad API key, missing store, model download, …
-            st.error(f"Something went wrong: {exc}")
-            st.session_state.messages.pop()  # drop the unanswered turn
-        else:
-            answer, context = result["answer"], result["context"]
-            st.markdown(answer)
-            if answer.strip() == ABSTENTION:
-                st.info("The assistant abstained — this isn't covered in the transcripts.")
-            if show_context:
-                render_context(context, latency)
+        with st.chat_message("assistant"):
+            try:
+                rag = get_pipeline(fetch_k, top_k)
+                with st.spinner("Retrieving and generating…"):
+                    started = time.perf_counter()
+                    # Tag trace with the tester's username in LangSmith
+                    result = rag.invoke(
+                        query,
+                        langsmith_extra={
+                            "metadata": {"user": current_user},
+                            "tags": [current_user, "alpha-cohort"]
+                        }
+                    )
+                    latency = time.perf_counter() - started
+            except Exception as exc:
+                st.error(f"Something went wrong: {exc}")
+                st.session_state.messages.pop()
+            else:
+                answer, context = result["answer"], result["context"]
+                st.markdown(answer)
+                if answer.strip() == ABSTENTION:
+                    st.info("The assistant abstained — this isn't covered in the transcripts.")
+                if show_context:
+                    render_context(context, latency)
 
-            st.session_state.messages.append(
-                {
-                    "role": "assistant",
-                    "content": answer,
-                    "context": context,
-                    "latency": latency,
-                }
-            )
+                st.session_state.messages.append(
+                    {
+                        "role": "assistant",
+                        "content": answer,
+                        "context": context,
+                        "latency": latency,
+                    }
+                )
+                st.rerun()
+
