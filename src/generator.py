@@ -20,9 +20,14 @@ that one waits for the whole answer and the other emits it token-by-token.
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Sanitize OPENAI_API_KEY to guard against accidental newlines from UI copy-pasting
+if "OPENAI_API_KEY" in os.environ:
+    os.environ["OPENAI_API_KEY"] = os.environ["OPENAI_API_KEY"].strip().replace("\n", "").replace("\r", "").replace(" ", "")
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 

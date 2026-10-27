@@ -16,7 +16,17 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import os
 import streamlit as st
+
+# Sync and sanitize Streamlit Cloud secrets into os.environ
+try:
+    if hasattr(st, "secrets"):
+        for k in ["OPENAI_API_KEY", "LANGCHAIN_API_KEY", "LANGCHAIN_PROJECT", "LANGCHAIN_TRACING_V2", "ALPHA_USERS"]:
+            if k in st.secrets:
+                os.environ[k] = str(st.secrets[k]).strip().replace("\n", "").replace("\r", "").replace(" ", "")
+except Exception:
+    pass
 
 from src.rag_pipeline import RagPipeline
 
