@@ -91,13 +91,19 @@ Answer:
 )
 
 
-chain = prompt | llm | StrOutputParser()
+def get_chain():
+    key = os.environ.get("OPENAI_API_KEY", "").strip().replace('"', '').replace("'", "")
+    if key:
+        llm_instance = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=key)
+    else:
+        llm_instance = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    return prompt | llm_instance | StrOutputParser()
 
 
 def generate(query: str, context: list[str]) -> str:
     """Generate a grounded answer from the query and context chunks."""
     context_text = "\n\n".join(context)
-    return chain.invoke({"question": query, "context": context_text})
+    return get_chain().invoke({"question": query, "context": context_text})
 
 
 def generate_stream(query: str, context: list[str]):
@@ -113,7 +119,7 @@ def generate_stream(query: str, context: list[str]):
              caller can clock time-to-first-token on the first *visible* token.
     """
     context_text = "\n\n".join(context)
-    for chunk in chain.stream({"question": query, "context": context_text}):
+    for chunk in get_chain().stream({"question": query, "context": context_text}):
         if chunk:                      # skip empty leading chunks
             yield chunk
 

@@ -24,7 +24,7 @@ try:
     if hasattr(st, "secrets"):
         for k in ["OPENAI_API_KEY", "LANGCHAIN_API_KEY", "LANGCHAIN_PROJECT", "LANGCHAIN_TRACING_V2", "ALPHA_USERS"]:
             if k in st.secrets:
-                os.environ[k] = str(st.secrets[k]).strip().replace("\n", "").replace("\r", "").replace(" ", "")
+                os.environ[k] = str(st.secrets[k]).strip().replace("\n", "").replace("\r", "").replace(" ", "").replace('"', '').replace("'", "")
 except Exception:
     pass
 
