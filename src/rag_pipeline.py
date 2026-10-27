@@ -1,6 +1,6 @@
 from src.reranker import RerankingRetriever
 from src.generator import generate
-from langsmith import traceable
+from langsmith import traceable, get_current_run_tree
 
 
 
@@ -11,6 +11,9 @@ class RagPipeline:
 
     @traceable(run_type="chain", name="RagPipeline")
     def invoke(self, query: str) -> dict:
+        rt = get_current_run_tree()
+        run_id = str(rt.id) if rt else None
+
         # 1. RETRIEVE: over-fetch then rerank down to top_k Documents
         docs = self.retriever.invoke(query)
 
@@ -25,6 +28,7 @@ class RagPipeline:
             "query": query,
             "context": context,
             "answer": answer,
+            "run_id": run_id,
         }
 
 

@@ -241,11 +241,27 @@ for idx, message in enumerate(st.session_state.messages):
         if message["role"] == "assistant":
             if show_context and message.get("context"):
                 render_context(message["context"], message.get("latency"))
-            # In-app thumbs feedback
+            # In-app thumbs feedback routed to LangSmith
             fb_key = f"fb_{idx}"
             if fb_key not in st.session_state:
-                st.session_state[fb_key] = None
+                st.session_state[fb_key] = message.get("user_score")
+            
             rating = st.feedback("thumbs", key=fb_key)
+            if rating is not None and rating != message.get("user_score") and message.get("run_id"):
+                message["user_score"] = rating
+                try:
+                    from langsmith import Client
+                    client = Client()
+                    score = 1.0 if rating == 1 else 0.0
+                    client.create_feedback(
+                        run_id=message["run_id"],
+                        key="user_feedback",
+                        score=score,
+                        comment="👍 User Thumbs Up" if rating == 1 else "👎 User Thumbs Down",
+                    )
+                    st.toast("Feedback sent to LangSmith! 🎉")
+                except Exception as fb_err:
+                    print(f"Error logging user feedback: {fb_err}")
 
 
 # Chat Input with budget check and length guardrail
@@ -279,6 +295,7 @@ else:
                 st.session_state.messages.pop()
             else:
                 answer, context = result["answer"], result["context"]
+                run_id = result.get("run_id")
                 st.markdown(answer)
                 if answer.strip() == ABSTENTION:
                     st.info("The assistant abstained — this isn't covered in the transcripts.")
@@ -291,6 +308,8 @@ else:
                         "content": answer,
                         "context": context,
                         "latency": latency,
+                        "run_id": run_id,
+                        "user_score": None,
                     }
                 )
                 st.rerun()

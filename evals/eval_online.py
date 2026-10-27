@@ -70,6 +70,12 @@ def score_recent_traces():
              dict(input=query, actual_output=answer, retrieval_context=context)),
         ]
 
+        metadata = run.extra.get("metadata", {}) if hasattr(run, "extra") and run.extra else {}
+        user = metadata.get("user", "unknown")
+        unscored_keys = [k for k, _, _ in jobs if k not in already]
+        if unscored_keys:
+            print(f"\n[Evaluating trace {str(run.id)[:8]}] user={user} | Q: '{query[:50]}'")
+
         for key, metric, tc_kwargs in jobs:
             if key in already:
                 continue                      # per-key dedup: skip only what's already scored
@@ -82,14 +88,19 @@ def score_recent_traces():
                     score=metric.score,
                     comment=metric.reason,
                 )
+                print(f"  -> {key}: {metric.score:.2f}")
             except Exception as e:
                 # one metric failing shouldn't sink the other two for this trace
-                print(f"[{key}] failed on run {run.id}: {e}")
+                print(f"  -> [{key}] failed on run {run.id}: {e}")
 
 
 if __name__ == "__main__":
-    # live-in-a-terminal version. For production, delete the loop and let cron
-    # call score_recent_traces() on a schedule instead.
-    while True:
+    import sys
+    if "--once" in sys.argv:
+        print("Running single evaluation pass on unscored traces...")
         score_recent_traces()
-        time.sleep(POLL_SECONDS)
+        print("\nAll unscored traces evaluated successfully!")
+    else:
+        while True:
+            score_recent_traces()
+            time.sleep(POLL_SECONDS)
