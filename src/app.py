@@ -22,13 +22,14 @@ import streamlit as st
 # Sync and sanitize Streamlit Cloud secrets into os.environ
 try:
     if hasattr(st, "secrets"):
-        for k in ["OPENAI_API_KEY", "LANGCHAIN_API_KEY", "LANGCHAIN_PROJECT", "LANGCHAIN_TRACING_V2", "ALPHA_USERS"]:
+        for k in ["OPENAI_API_KEY", "LANGCHAIN_API_KEY", "LANGCHAIN_PROJECT", "LANGCHAIN_TRACING_V2", "ALPHA_USERS", "MIXPANEL_PROJECT_TOKEN"]:
             if k in st.secrets:
                 os.environ[k] = str(st.secrets[k]).strip().replace("\n", "").replace("\r", "").replace(" ", "").replace('"', '').replace("'", "")
 except Exception:
     pass
 
 from src.rag_pipeline import RagPipeline
+from src.analytics import track_event
 
 ABSTENTION = "I don't have enough information in the provided data to answer that."
 
@@ -172,6 +173,12 @@ if not current_user:
 user_queries_count = len([m for m in st.session_state.messages if m["role"] == "user"])
 queries_remaining = max(0, MAX_QUERIES_PER_USER - user_queries_count)
 
+# Track Session Started once per user session
+if "session_started_tracked" not in st.session_state:
+    track_event(current_user, "Session Started", {"cohort": "alpha"})
+    st.session_state.session_started_tracked = True
+
+
 
 with st.sidebar:
     st.subheader(f"👋 Welcome, {current_user.capitalize()}!")
@@ -249,10 +256,10 @@ for idx, message in enumerate(st.session_state.messages):
             rating = st.feedback("thumbs", key=fb_key)
             if rating is not None and rating != message.get("user_score") and message.get("run_id"):
                 message["user_score"] = rating
+                score = 1.0 if rating == 1 else 0.0
                 try:
                     from langsmith import Client
                     client = Client()
-                    score = 1.0 if rating == 1 else 0.0
                     client.create_feedback(
                         run_id=message["run_id"],
                         key="user_feedback",
@@ -262,10 +269,24 @@ for idx, message in enumerate(st.session_state.messages):
                     st.toast("Feedback sent to LangSmith! 🎉")
                 except Exception as fb_err:
                     print(f"Error logging user feedback: {fb_err}")
+                
+                # Product Analytics: Track user feedback in Mixpanel
+                track_event(
+                    current_user,
+                    "Feedback Submitted",
+                    {
+                        "rating": "thumbs_up" if rating == 1 else "thumbs_down",
+                        "score": score,
+                        "query_index": idx // 2,
+                    }
+                )
 
 
 # Chat Input with budget check and length guardrail
 if queries_remaining <= 0:
+    if "quota_reached_tracked" not in st.session_state:
+        track_event(current_user, "Quota Reached", {"total_queries": MAX_QUERIES_PER_USER})
+        st.session_state.quota_reached_tracked = True
     st.info("🎉 **You have reached your 15-question alpha quota!** Thank you so much for testing Lenny's Assistant.")
 else:
     placeholder = f"Ask anything about product management ({queries_remaining} questions left, max {MAX_QUERY_CHARS} chars)..."
@@ -301,6 +322,18 @@ else:
                     st.info("The assistant abstained — this isn't covered in the transcripts.")
                 if show_context:
                     render_context(context, latency)
+
+                # Product Analytics: Track query in Mixpanel
+                track_event(
+                    current_user,
+                    "Query Submitted",
+                    {
+                        "query_number": len(st.session_state.messages) // 2,
+                        "char_length": len(query),
+                        "latency_seconds": round(latency, 2),
+                        "abstained": (answer.strip() == ABSTENTION),
+                    }
+                )
 
                 st.session_state.messages.append(
                     {
