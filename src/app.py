@@ -177,9 +177,9 @@ user_queries_count = len([m for m in st.session_state.messages if m["role"] == "
 queries_remaining = max(0, MAX_QUERIES_PER_USER - user_queries_count)
 
 # Track Session Started once per user session
-if "session_started_tracked" not in st.session_state:
-    track_event(current_user, "Session Started", {"cohort": "alpha"})
-    st.session_state.session_started_tracked = True
+if not st.session_state.get("session_started_tracked", False):
+    if track_event(current_user, "Session Started", {"cohort": "alpha"}):
+        st.session_state.session_started_tracked = True
 
 
 
@@ -187,6 +187,14 @@ with st.sidebar:
     st.subheader(f"👋 Welcome, {current_user.capitalize()}!")
     st.caption("Alpha Testing Cohort")
     
+    # Admin telemetry status indicator
+    if current_user == "kunal":
+        from src.analytics import get_mixpanel
+        if get_mixpanel() is not None:
+            st.caption("📊 Mixpanel: 🟢 Connected")
+        else:
+            st.warning("📊 Mixpanel: 🔴 Token missing in Secrets")
+
     # Quota Card
     st.markdown(f"**Question Quota:** `{user_queries_count} / {MAX_QUERIES_PER_USER}` used")
     st.progress(user_queries_count / MAX_QUERIES_PER_USER)
