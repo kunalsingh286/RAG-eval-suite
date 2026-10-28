@@ -18,6 +18,9 @@ if str(ROOT) not in sys.path:
 
 import os
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Sync and sanitize Streamlit Cloud secrets into os.environ
 try:
